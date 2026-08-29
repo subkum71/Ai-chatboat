@@ -8,7 +8,7 @@ load_dotenv()
 
 
 ## importing project's package
-from app.Backend.customer.customer import get_allcustomer
+from app.Backend.customer.service import get_allcustomer
 
 def main():
     customers = get_allcustomer()
