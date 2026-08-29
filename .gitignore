@@ -1,0 +1,197 @@
+ # ============================================
+
+# Python
+
+# ============================================
+
+**pycache**/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Python packaging
+
+*.egg
+*.egg-info/
+dist/
+build/
+develop-eggs/
+.eggs/
+pip-wheel-metadata/
+
+# Virtual environments
+
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ============================================
+
+# Environment & Secrets
+
+# ============================================
+
+.env
+.env.*
+!.env.example
+
+# Certificates / private keys
+
+*.pem
+*.key
+*.crt
+
+# ============================================
+
+# FastAPI / Uvicorn
+
+# ============================================
+
+*.log
+logs/
+
+# ============================================
+
+# Testing / Coverage
+
+# ============================================
+
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# ============================================
+
+# IDE / Editors
+
+# ============================================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ============================================
+
+# Jupyter
+
+# ============================================
+
+.ipynb_checkpoints/
+
+# ============================================
+
+# Database / Local Data
+
+# ============================================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# Local database dumps
+
+*.sql
+*.dump
+
+# ============================================
+
+# Application-generated files
+
+# ============================================
+
+uploads/
+temp/
+tmp/
+cache/
+
+# ============================================
+
+# AI / RAG
+
+# ============================================
+
+# Local vector databases / indexes
+
+chroma/
+chroma_db/
+vector_db/
+faiss_index/
+
+# Embeddings / generated model files
+
+embeddings/
+models_cache/
+
+# ============================================
+
+# Build / Deployment
+
+# ============================================
+
+*.pid
+*.pid.lock
+
+# Docker local overrides
+
+docker-compose.override.yml
+
+# ============================================
+
+# OS files
+
+# ============================================
+
+Thumbs.db
+.DS_Store
+Desktop.ini
+EOF
+::
+
+### Important for your project
+
+Commit this file:
+
+```text
+.gitignore
+```
+
+But **do not commit**:
+
+```text
+.env
+database passwords
+API keys
+JWT secrets
+OpenAI/API credentials
+private certificates
+local vector databases
+```
+
+Commit an example configuration instead:
+
+```text
+.env.example
+```
+
+For example:
+
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=ecommerce
+DB_USER=your_username
+DB_PASSWORD=your_password
+
+OPENAI_API_KEY=your_api_key
