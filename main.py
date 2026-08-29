@@ -8,42 +8,22 @@ load_dotenv()
 
 
 ## importing project's package
-from app.Database.db import get_db_connection
+from app.Backend.customer.customer import get_allcustomer
 
-def get_customers():
-    connection = None
-    cursor = None
+def main():
+    customers = get_allcustomer()
 
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor()
+    print("Customer List")
+    print("-" * 80)
 
-        query = """
-            SELECT customer_id, phone, customer_name
-            FROM customer
-            LIMIT 10;
-        """
-
-        cursor.execute(query)
-
-        customers = cursor.fetchall()
-
-        for customer in customers:
-            print(customer)
-
-        return customers
-
-    except Exception as e:
-        print(f"Database error: {e}")
-        return []
-
-    finally:
-        if cursor:
-            cursor.close()
-
-        if connection:
-            connection.close()
+    for customer in customers:
+        print(
+            f"ID: {customer['customer_id']}, "
+            f"Name: {customer['customer_name']}, "
+            f"Phone: {customer['phone']}, "
+            f"Email: {customer['email']}"
+        )
 
 
 if __name__ == "__main__":
-    get_customers()
+    main()
