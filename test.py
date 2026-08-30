@@ -9,10 +9,10 @@ load_dotenv()
 
 ## importing project's package
 from app.Backend.customer.service import get_allcustomer
-
+import app.Backend.product.productservice
 ## main function
 
-def main():
+def customerList():
     customers = get_allcustomer()
 
     print("Customer List")
@@ -26,6 +26,37 @@ def main():
             f"Email: {customer['email']}"
         )
 
+def productcatg_list():
+    errormsg=""
+    productcatlist, errormsg = app.Backend.product.productservice.get_List_ProductCategory()
+    if errormsg =="" :
+        for catg in productcatlist:
+                print(
+                    f"ID: {catg['category_name']}, "
+                    f"Name: {catg['description']} "                
+                )
+    else:
+        print(errormsg)
 
-if __name__ == "__main__":
-    main()
+def product_listForcatg():
+    errormsg=""
+    productcatlist, errormsg = app.Backend.product.productservice.search_product_category("ELECT")
+    if errormsg =="" :
+        if len(productcatlist)==0 :
+             print("No matching category found")
+        for catg in productcatlist:
+                print(
+                    f"ID: {catg['category_name']}, "
+                    f"Name: {catg['description']} "                
+                )
+    else:
+        print(errormsg)
+ 
+def main():
+##   customerList()
+##   productcatg_list()
+    product_listForcatg()
+
+## Main start from here
+
+main()
