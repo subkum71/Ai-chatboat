@@ -4,6 +4,7 @@ from app.Database.db import get_db_connection
 
 #Purpose : Return Product category with its description
 def get_List_ProductCategory():
+     # database code to get Product category list
     connection = None
     cursor = None
     try:
@@ -31,7 +32,8 @@ def get_List_ProductCategory():
     #Purpose : Return Product category with its description
 
 #Purpose : Return Productlist for given category
-def search_product_category(Category):
+def search_product_category(category):
+     # database code to get matching Product category list
     connection = None
     cursor = None
     try:
@@ -43,7 +45,7 @@ def search_product_category(Category):
             select category_name, description from ecommerce_chat.product_category
               WHERE UPPER(category_name) LIKE UPPER(%s)
         """ 
-        cursor.execute(query,(Category+'%',))
+        cursor.execute(query,(category+'%',))
         productcatlist = cursor.fetchall()
         return productcatlist,""
 
