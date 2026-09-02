@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 # Load variables from .env
 load_dotenv()
 
-
 ## importing project's package
 from app.Backend.customer.service import get_allcustomer
 import app.Backend.product.productservice
@@ -51,12 +50,42 @@ def product_listForcatg():
                 )
     else:
         print(errormsg)
- 
+def search_product_on_name():
+    errormsg=""
+    print("search_product_on_name")
+    productcatlist, errormsg = app.Backend.product.productservice.search_product_on_name("TV")
+    if errormsg =="" :
+        if len(productcatlist)==0 :
+             print("No matching Product found")
+        for catg in productcatlist:
+                print(
+                    f"Name: {catg['productName']}, "
+                    f"Description: {catg['productdescription']} "                
+                )
+    else:
+        print(errormsg)
+
+def search_product_on_barnd():
+    errormsg=""
+    print("search_product_on_barnd")
+    productcatlist, errormsg = app.Backend.product.productservice.search_product_on_brand("TV","samsung")
+    if errormsg =="" :
+        if len(productcatlist)==0 :
+             print("No matching Product found")
+        for catg in productcatlist:
+                print(
+                    f"Name: {catg['productname']}, "
+                    f"Description: {catg['productdescription']} "                
+                )
+    else:
+        print(errormsg)
+
 def main():
-##   customerList()
+##  customerList()
 ##   productcatg_list()
-    product_listForcatg()
+##   product_listForcatg()
+    print("Test1")
+    search_product_on_barnd()
 
 ## Main start from here
-
 main()
