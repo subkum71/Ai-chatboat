@@ -12,9 +12,10 @@ from app.Agent.toolproduct import(
     search_product_on_description_Service,
     search_product_on_brand_Service,
     get_product_List_Category_Service,
-    is_stockavilableforproduct_Service
+    is_stockavilableforproduct_Service,
 )
  
+from app.Agent.toolcustomer import get_customer_by_phone
 
 from app.Agent.prompts import SYSTEM_PROMPT
 
@@ -25,10 +26,9 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
  
 if not OLLAMA_MODEL:
     raise ValueError("OLLAMA_MODEL is not configured")
-model = ChatOllama(
-    model=OLLAMA_MODEL,
-    temperature=0
-)
+
+model = ChatOllama(model=OLLAMA_MODEL,temperature=0)
+
 ## Tool configuration
 tools = [
     get_all_product_categories,
@@ -37,18 +37,17 @@ tools = [
     search_product_on_description_Service,
     search_product_on_brand_Service,
     get_product_List_Category_Service,
-    is_stockavilableforproduct_Service
+    is_stockavilableforproduct_Service,
+    get_customer_by_phone
 ]
+
+
+
 ## Create an Agent
-agent = create_agent(
-    model=model,
-    tools=tools,
-    system_prompt=SYSTEM_PROMPT
-)
+agent = create_agent(model=model,tools=tools,system_prompt=SYSTEM_PROMPT)
 
 ## Chat Function
 def chat(message: str) -> str:
-
     result = agent.invoke(
         {
             "messages": [
