@@ -1,3 +1,4 @@
+'''
 import os
 import mysql.connector
 from dotenv import load_dotenv
@@ -5,13 +6,14 @@ from dotenv import load_dotenv
 
 # Load variables from .env
 load_dotenv()
+'''
 
 ## importing project's package
 from app.Database.db import get_db_connection
 
 
-def get_allcustomer():
-    print(f"Getting customer")
+def get_customer(phone:str):
+    ## print(f"Getting customer details")
 
     connection = None
     cursor = None
@@ -23,13 +25,14 @@ def get_allcustomer():
         cursor = connection.cursor(dictionary=True)
 
         query = """
-            SELECT customer_id,customer_name,phone,email
+            SELECT customer_id,customer_name,phone,email, state, address, country
             FROM customer
+            WHERE phone =  %s
         """
 
-        cursor.execute(query)
-        customers = cursor.fetchall()
-        return customers
+        cursor.execute(query,(phone,))
+        customer = cursor.fetchall()
+        return customer
 
     except Exception as error:
         print(f"Error fetching customer: {error}")
