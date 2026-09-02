@@ -15,44 +15,58 @@ st.write("How can I help you")
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
 # -----------------------------
 # Sidebar
 # -----------------------------
 with st.sidebar:
-
     st.header("Chat")
 
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.rerun()
-# -----------------------------
-# Session State
-# -----------------------------
 
+# -----------------------------
+# Session State / Conversation Memory
+# -----------------------------
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
 # -----------------------------
 # Display Chat History
 # -----------------------------
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+
+    if message["role"] == "user":
+        with st.chat_message("user"):
+            st.write(message["content"])
+    elif message["role"] == "assistant":
+        with st.chat_message("assistant"):
+            st.write(message["content"])
+
+    ## with st.chat_message(message["role"]):
+    ## st.markdown(message["content"])
+
 # -----------------------------
 # User Input
 # -----------------------------
-
 user_input = st.chat_input(
-    "Ask about your order, check products or categories..."
+    "Ask about your details, order, check products or categories..."
 )
-
-
 if user_input:
+
+    # -----------------------------
+    # Save User Message
+    # -----------------------------
 
     st.session_state.messages.append({
         "role": "user",
         "content": user_input
     })
 
+    # -----------------------------
+    # Display User Message
+    # -----------------------------
     with st.chat_message("user"):
         st.markdown(user_input)
 
@@ -60,16 +74,11 @@ if user_input:
     # Calling Agent
     # -----------------------------
     with st.chat_message("assistant"):
-
         with st.spinner("Thinking..."):
-
-            response = agent.invoke({
-                "messages": st.session_state.messages
-            })
-
+            response = agent.invoke({"messages": st.session_state.messages})
             answer = response["messages"][-1].content
-
             st.markdown(answer)
+
     # -----------------------------
     # Save Response
     # -----------------------------
