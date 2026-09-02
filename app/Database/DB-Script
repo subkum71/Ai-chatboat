@@ -1,0 +1,239 @@
+-- E-commerce Chatbot MySQL schema and seed data
+-- Generated for MVP/demo use. Tested for MySQL 8.x syntax.
+
+CREATE DATABASE IF NOT EXISTS ecommerce_chat CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE ecommerce_chat;
+
+DROP TABLE IF EXISTS product_detail;
+DROP TABLE IF EXISTS product_category;
+DROP TABLE IF EXISTS customer;
+
+CREATE TABLE customer (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    phone VARCHAR(20),
+    address VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    country VARCHAR(100) DEFAULT 'India',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) NOT NULL DEFAULT 'Active',
+    INDEX idx_customer_email (email),
+    INDEX idx_customer_status (status)
+) ENGINE=InnoDB;
+
+CREATE TABLE product_category (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(100) NOT NULL UNIQUE,
+    description VARCHAR(500),
+    status VARCHAR(20) NOT NULL DEFAULT 'Active',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE product_detail (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    product_name VARCHAR(200) NOT NULL,
+    sku VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT NOT NULL,
+    brand VARCHAR(100),
+    price DECIMAL(10,2) NOT NULL,
+    stock_quantity INT NOT NULL DEFAULT 0,
+    rating DECIMAL(2,1),
+    status VARCHAR(20) NOT NULL DEFAULT 'Active',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NULL DEFAULT NULL,
+    CONSTRAINT fk_product_category
+        FOREIGN KEY (category_id) REFERENCES product_category(category_id),
+    CONSTRAINT chk_product_price CHECK (price >= 0),
+    CONSTRAINT chk_product_stock CHECK (stock_quantity >= 0),
+    CONSTRAINT chk_product_rating CHECK (rating IS NULL OR (rating >= 0 AND rating <= 5)),
+    INDEX idx_product_category (category_id),
+    INDEX idx_product_name (product_name),
+    INDEX idx_product_brand (brand),
+    INDEX idx_product_status (status)
+) ENGINE=InnoDB;
+
+-- 10 Product Categories
+INSERT INTO product_category (category_id, category_name, description, status, created_at) VALUES
+(1, 'Electronics', 'Electronic devices and accessories', 'Active', '2026-08-01 10:00:00'),
+(2, 'Mobile Phones', 'Smartphones and mobile accessories', 'Active', '2026-08-01 10:00:00'),
+(3, 'Laptops', 'Laptops and computing devices', 'Active', '2026-08-01 10:00:00'),
+(4, 'Home Appliances', 'Appliances for home and kitchen', 'Active', '2026-08-01 10:00:00'),
+(5, 'Television', 'Smart TVs and entertainment displays', 'Active', '2026-08-01 10:00:00'),
+(6, 'Audio', 'Headphones, speakers and audio equipment', 'Active', '2026-08-01 10:00:00'),
+(7, 'Cameras', 'Digital cameras and photography equipment', 'Active', '2026-08-01 10:00:00'),
+(8, 'Gaming', 'Gaming consoles and accessories', 'Active', '2026-08-01 10:00:00'),
+(9, 'Wearables', 'Smartwatches and fitness devices', 'Active', '2026-08-01 10:00:00'),
+(10, 'Accessories', 'Computer and mobile accessories', 'Active', '2026-08-01 10:00:00');
+
+-- 50 Customers
+INSERT INTO customer (customer_id, customer_name, email, phone, address, city, state, country, created_at, status) VALUES
+(1, 'Aarav Singh', 'customer001@example.com', '+919000000001', '8 Main Road', 'Delhi', 'Delhi', 'India', '2026-01-01 00:00:00', 'Active'),
+(2, 'Vivaan Malhotra', 'customer002@example.com', '+919000000002', '15 Main Road', 'Noida', 'Uttar Pradesh', 'India', '2026-01-04 00:00:00', 'Active'),
+(3, 'Aditya Agarwal', 'customer003@example.com', '+919000000003', '22 Main Road', 'Gurugram', 'Haryana', 'India', '2026-01-07 00:00:00', 'Active'),
+(4, 'Arjun Mishra', 'customer004@example.com', '+919000000004', '29 Main Road', 'Chandigarh', 'Chandigarh', 'India', '2026-01-10 00:00:00', 'Active'),
+(5, 'Rahul Sethi', 'customer005@example.com', '+919000000005', '36 Main Road', 'Jaipur', 'Rajasthan', 'India', '2026-01-13 00:00:00', 'Active'),
+(6, 'Rohan Iyer', 'customer006@example.com', '+919000000006', '43 Main Road', 'Mumbai', 'Maharashtra', 'India', '2026-01-16 00:00:00', 'Active'),
+(7, 'Vikram Sharma', 'customer007@example.com', '+919000000007', '50 Main Road', 'Pune', 'Maharashtra', 'India', '2026-01-19 00:00:00', 'Active'),
+(8, 'Karan Verma', 'customer008@example.com', '+919000000008', '57 Main Road', 'Bengaluru', 'Karnataka', 'India', '2026-01-22 00:00:00', 'Active'),
+(9, 'Amit Mehta', 'customer009@example.com', '+919000000009', '64 Main Road', 'Hyderabad', 'Telangana', 'India', '2026-01-25 00:00:00', 'Active'),
+(10, 'Neeraj Bansal', 'customer010@example.com', '+919000000010', '71 Main Road', 'Chennai', 'Tamil Nadu', 'India', '2026-01-28 00:00:00', 'Active'),
+(11, 'Priya Chopra', 'customer011@example.com', '+919000000011', '78 Main Road', 'Kolkata', 'West Bengal', 'India', '2026-01-31 00:00:00', 'Active'),
+(12, 'Ananya Khanna', 'customer012@example.com', '+919000000012', '85 Main Road', 'Ahmedabad', 'Gujarat', 'India', '2026-02-03 00:00:00', 'Active'),
+(13, 'Isha Nair', 'customer013@example.com', '+919000000013', '92 Main Road', 'Delhi', 'Delhi', 'India', '2026-02-06 00:00:00', 'Active'),
+(14, 'Neha Kumar', 'customer014@example.com', '+919000000014', '99 Main Road', 'Noida', 'Uttar Pradesh', 'India', '2026-02-09 00:00:00', 'Active'),
+(15, 'Pooja Gupta', 'customer015@example.com', '+919000000015', '106 Main Road', 'Gurugram', 'Haryana', 'India', '2026-02-12 00:00:00', 'Active'),
+(16, 'Kavya Kapoor', 'customer016@example.com', '+919000000016', '113 Main Road', 'Chandigarh', 'Chandigarh', 'India', '2026-02-15 00:00:00', 'Active'),
+(17, 'Sneha Joshi', 'customer017@example.com', '+919000000017', '120 Main Road', 'Jaipur', 'Rajasthan', 'India', '2026-02-18 00:00:00', 'Inactive'),
+(18, 'Riya Saxena', 'customer018@example.com', '+919000000018', '127 Main Road', 'Mumbai', 'Maharashtra', 'India', '2026-02-21 00:00:00', 'Active'),
+(19, 'Simran Rao', 'customer019@example.com', '+919000000019', '134 Main Road', 'Pune', 'Maharashtra', 'India', '2026-02-24 00:00:00', 'Active'),
+(20, 'Meera Patel', 'customer020@example.com', '+919000000020', '141 Main Road', 'Bengaluru', 'Karnataka', 'India', '2026-02-27 00:00:00', 'Active'),
+(21, 'Nisha Singh', 'customer021@example.com', '+919000000021', '148 Main Road', 'Hyderabad', 'Telangana', 'India', '2026-03-02 00:00:00', 'Active'),
+(22, 'Aditi Malhotra', 'customer022@example.com', '+919000000022', '155 Main Road', 'Chennai', 'Tamil Nadu', 'India', '2026-03-05 00:00:00', 'Active'),
+(23, 'Shreya Agarwal', 'customer023@example.com', '+919000000023', '162 Main Road', 'Kolkata', 'West Bengal', 'India', '2026-03-08 00:00:00', 'Active'),
+(24, 'Tanvi Mishra', 'customer024@example.com', '+919000000024', '169 Main Road', 'Ahmedabad', 'Gujarat', 'India', '2026-03-11 00:00:00', 'Active'),
+(25, 'Divya Sethi', 'customer025@example.com', '+919000000025', '176 Main Road', 'Delhi', 'Delhi', 'India', '2026-03-14 00:00:00', 'Active'),
+(26, 'Aarav Iyer', 'customer026@example.com', '+919000000026', '183 Main Road', 'Noida', 'Uttar Pradesh', 'India', '2026-03-17 00:00:00', 'Active'),
+(27, 'Vivaan Sharma', 'customer027@example.com', '+919000000027', '190 Main Road', 'Gurugram', 'Haryana', 'India', '2026-03-20 00:00:00', 'Active'),
+(28, 'Aditya Verma', 'customer028@example.com', '+919000000028', '197 Main Road', 'Chandigarh', 'Chandigarh', 'India', '2026-03-23 00:00:00', 'Active'),
+(29, 'Arjun Mehta', 'customer029@example.com', '+919000000029', '204 Main Road', 'Jaipur', 'Rajasthan', 'India', '2026-03-26 00:00:00', 'Active'),
+(30, 'Rahul Bansal', 'customer030@example.com', '+919000000030', '211 Main Road', 'Mumbai', 'Maharashtra', 'India', '2026-03-29 00:00:00', 'Active'),
+(31, 'Rohan Chopra', 'customer031@example.com', '+919000000031', '218 Main Road', 'Pune', 'Maharashtra', 'India', '2026-04-01 00:00:00', 'Active'),
+(32, 'Vikram Khanna', 'customer032@example.com', '+919000000032', '225 Main Road', 'Bengaluru', 'Karnataka', 'India', '2026-04-04 00:00:00', 'Active'),
+(33, 'Karan Nair', 'customer033@example.com', '+919000000033', '232 Main Road', 'Hyderabad', 'Telangana', 'India', '2026-04-07 00:00:00', 'Active'),
+(34, 'Amit Kumar', 'customer034@example.com', '+919000000034', '239 Main Road', 'Chennai', 'Tamil Nadu', 'India', '2026-04-10 00:00:00', 'Active'),
+(35, 'Neeraj Gupta', 'customer035@example.com', '+919000000035', '246 Main Road', 'Kolkata', 'West Bengal', 'India', '2026-04-13 00:00:00', 'Active'),
+(36, 'Priya Kapoor', 'customer036@example.com', '+919000000036', '3 Main Road', 'Ahmedabad', 'Gujarat', 'India', '2026-04-16 00:00:00', 'Active'),
+(37, 'Ananya Joshi', 'customer037@example.com', '+919000000037', '10 Main Road', 'Delhi', 'Delhi', 'India', '2026-04-19 00:00:00', 'Active'),
+(38, 'Isha Saxena', 'customer038@example.com', '+919000000038', '17 Main Road', 'Noida', 'Uttar Pradesh', 'India', '2026-04-22 00:00:00', 'Inactive'),
+(39, 'Neha Rao', 'customer039@example.com', '+919000000039', '24 Main Road', 'Gurugram', 'Haryana', 'India', '2026-04-25 00:00:00', 'Active'),
+(40, 'Pooja Patel', 'customer040@example.com', '+919000000040', '31 Main Road', 'Chandigarh', 'Chandigarh', 'India', '2026-04-28 00:00:00', 'Active'),
+(41, 'Kavya Singh', 'customer041@example.com', '+919000000041', '38 Main Road', 'Jaipur', 'Rajasthan', 'India', '2026-05-01 00:00:00', 'Active'),
+(42, 'Sneha Malhotra', 'customer042@example.com', '+919000000042', '45 Main Road', 'Mumbai', 'Maharashtra', 'India', '2026-05-04 00:00:00', 'Active'),
+(43, 'Riya Agarwal', 'customer043@example.com', '+919000000043', '52 Main Road', 'Pune', 'Maharashtra', 'India', '2026-05-07 00:00:00', 'Active'),
+(44, 'Simran Mishra', 'customer044@example.com', '+919000000044', '59 Main Road', 'Bengaluru', 'Karnataka', 'India', '2026-05-10 00:00:00', 'Active'),
+(45, 'Meera Sethi', 'customer045@example.com', '+919000000045', '66 Main Road', 'Hyderabad', 'Telangana', 'India', '2026-05-13 00:00:00', 'Active'),
+(46, 'Nisha Iyer', 'customer046@example.com', '+919000000046', '73 Main Road', 'Chennai', 'Tamil Nadu', 'India', '2026-05-16 00:00:00', 'Active'),
+(47, 'Aditi Sharma', 'customer047@example.com', '+919000000047', '80 Main Road', 'Kolkata', 'West Bengal', 'India', '2026-05-19 00:00:00', 'Active'),
+(48, 'Shreya Verma', 'customer048@example.com', '+919000000048', '87 Main Road', 'Ahmedabad', 'Gujarat', 'India', '2026-05-22 00:00:00', 'Active'),
+(49, 'Tanvi Mehta', 'customer049@example.com', '+919000000049', '94 Main Road', 'Delhi', 'Delhi', 'India', '2026-05-25 00:00:00', 'Active'),
+(50, 'Divya Bansal', 'customer050@example.com', '+919000000050', '101 Main Road', 'Noida', 'Uttar Pradesh', 'India', '2026-05-28 00:00:00', 'Active');
+
+-- 100 Products
+INSERT INTO product_detail (product_id, category_id, product_name, sku, description, brand, price, stock_quantity, rating, status, created_at, updated_at) VALUES
+(1, 1, 'Wireless Keyboard', 'SKU-01-001', 'Wireless Keyboard by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 1975.00, 18, 4.2, 'Active', '2026-02-02 00:00:00', NULL),
+(2, 1, 'USB-C Hub', 'SKU-01-002', 'USB-C Hub by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 2689.00, 31, 4.9, 'Active', '2026-02-03 00:00:00', NULL),
+(3, 1, 'Bluetooth Mouse', 'SKU-01-003', 'Bluetooth Mouse by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 3403.00, 44, 4.0, 'Active', '2026-02-04 00:00:00', NULL),
+(4, 1, 'Power Bank', 'SKU-01-004', 'Power Bank by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 4117.00, 57, 4.7, 'Active', '2026-02-05 00:00:00', NULL),
+(5, 1, 'Smart Plug', 'SKU-01-005', 'Smart Plug by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 4831.00, 70, 3.8, 'Active', '2026-02-06 00:00:00', NULL),
+(6, 1, 'Wi-Fi Router', 'SKU-01-006', 'Wi-Fi Router by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 1345.00, 83, 4.5, 'Active', '2026-02-07 00:00:00', NULL),
+(7, 1, 'Webcam', 'SKU-01-007', 'Webcam by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 2059.00, 96, 3.6, 'Active', '2026-02-08 00:00:00', NULL),
+(8, 1, 'Portable SSD', 'SKU-01-008', 'Portable SSD by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 2773.00, 13, 4.3, 'Active', '2026-02-09 00:00:00', NULL),
+(9, 1, 'USB Flash Drive', 'SKU-01-009', 'USB Flash Drive by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 3487.00, 26, 5.0, 'Active', '2026-02-10 00:00:00', NULL),
+(10, 1, 'Laptop Stand', 'SKU-01-010', 'Laptop Stand by Logitech. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Logitech', 4201.00, 39, 4.1, 'Active', '2026-02-11 00:00:00', NULL),
+(11, 2, 'Galaxy A55 Smartphone', 'SKU-02-001', 'Galaxy A55 Smartphone by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 37299.00, 52, 4.8, 'Active', '2026-02-12 00:00:00', NULL),
+(12, 2, 'Pixel 9a Smartphone', 'SKU-02-002', 'Pixel 9a Smartphone by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 49199.00, 65, 3.9, 'Active', '2026-02-13 00:00:00', NULL),
+(13, 2, 'OnePlus Nord Smartphone', 'SKU-02-003', 'OnePlus Nord Smartphone by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 61099.00, 78, 4.6, 'Active', '2026-02-14 00:00:00', NULL),
+(14, 2, 'Moto G Smartphone', 'SKU-02-004', 'Moto G Smartphone by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 72999.00, 91, 3.7, 'Active', '2026-02-15 00:00:00', NULL),
+(15, 2, 'Redmi Note Smartphone', 'SKU-02-005', 'Redmi Note Smartphone by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 14899.00, 8, 4.4, 'Active', '2026-02-16 00:00:00', NULL),
+(16, 2, 'iPhone 16 Smartphone', 'SKU-02-006', 'iPhone 16 Smartphone by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 26799.00, 21, 3.5, 'Active', '2026-02-17 00:00:00', NULL),
+(17, 2, 'Nothing Phone Smartphone', 'SKU-02-007', 'Nothing Phone Smartphone by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 38699.00, 34, 4.2, 'Active', '2026-02-18 00:00:00', NULL),
+(18, 2, 'Realme GT Smartphone', 'SKU-02-008', 'Realme GT Smartphone by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 50599.00, 47, 4.9, 'Active', '2026-02-19 00:00:00', NULL),
+(19, 2, 'Samsung Galaxy S25', 'SKU-02-009', 'Samsung Galaxy S25 by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 62499.00, 60, 4.0, 'Active', '2026-02-20 00:00:00', NULL),
+(20, 2, 'OnePlus 13', 'SKU-02-010', 'OnePlus 13 by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 74399.00, 73, 4.7, 'Active', '2026-02-21 00:00:00', NULL),
+(21, 3, 'Dell Inspiron 14', 'SKU-03-001', 'Dell Inspiron 14 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 84999.00, 86, 3.8, 'Active', '2026-02-22 00:00:00', NULL),
+(22, 3, 'HP Pavilion 15', 'SKU-03-002', 'HP Pavilion 15 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 100299.00, 99, 4.5, 'Active', '2026-02-23 00:00:00', NULL),
+(23, 3, 'Lenovo IdeaPad Slim 5', 'SKU-03-003', 'Lenovo IdeaPad Slim 5 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 115599.00, 16, 3.6, 'Active', '2026-02-24 00:00:00', NULL),
+(24, 3, 'Acer Aspire 5', 'SKU-03-004', 'Acer Aspire 5 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 40899.00, 29, 4.3, 'Active', '2026-02-25 00:00:00', NULL),
+(25, 3, 'ASUS Vivobook 15', 'SKU-03-005', 'ASUS Vivobook 15 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 56199.00, 42, 5.0, 'Active', '2026-02-26 00:00:00', NULL),
+(26, 3, 'Dell Latitude 5450', 'SKU-03-006', 'Dell Latitude 5450 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 71499.00, 55, 4.1, 'Active', '2026-02-27 00:00:00', NULL),
+(27, 3, 'HP ProBook 440', 'SKU-03-007', 'HP ProBook 440 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 86799.00, 68, 4.8, 'Active', '2026-02-28 00:00:00', NULL),
+(28, 3, 'Lenovo ThinkPad E14', 'SKU-03-008', 'Lenovo ThinkPad E14 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 102099.00, 81, 3.9, 'Active', '2026-03-01 00:00:00', NULL),
+(29, 3, 'ASUS Zenbook 14', 'SKU-03-009', 'ASUS Zenbook 14 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 117399.00, 94, 4.6, 'Active', '2026-03-02 00:00:00', NULL),
+(30, 3, 'Acer Swift Go 14', 'SKU-03-010', 'Acer Swift Go 14 by Dell. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Dell', 42699.00, 11, 3.7, 'Active', '2026-03-03 00:00:00', NULL),
+(31, 4, 'Air Fryer 4L', 'SKU-04-001', 'Air Fryer 4L by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 43284.00, 24, 4.4, 'Active', '2026-03-04 00:00:00', NULL),
+(32, 4, 'Microwave Oven 20L', 'SKU-04-002', 'Microwave Oven 20L by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 54929.00, 37, 3.5, 'Active', '2026-03-05 00:00:00', NULL),
+(33, 4, 'Robot Vacuum Cleaner', 'SKU-04-003', 'Robot Vacuum Cleaner by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 66574.00, 50, 4.2, 'Active', '2026-03-06 00:00:00', NULL),
+(34, 4, 'Mixer Grinder 750W', 'SKU-04-004', 'Mixer Grinder 750W by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 9719.00, 63, 4.9, 'Active', '2026-03-07 00:00:00', NULL),
+(35, 4, 'Electric Kettle 1.5L', 'SKU-04-005', 'Electric Kettle 1.5L by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 21364.00, 76, 4.0, 'Active', '2026-03-08 00:00:00', NULL),
+(36, 4, 'Induction Cooktop', 'SKU-04-006', 'Induction Cooktop by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 33009.00, 89, 4.7, 'Active', '2026-03-09 00:00:00', NULL),
+(37, 4, 'Front Load Washing Machine', 'SKU-04-007', 'Front Load Washing Machine by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 44654.00, 6, 3.8, 'Active', '2026-03-10 00:00:00', NULL),
+(38, 4, 'Refrigerator 260L', 'SKU-04-008', 'Refrigerator 260L by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 56299.00, 19, 4.5, 'Active', '2026-03-11 00:00:00', NULL),
+(39, 4, 'Room Heater', 'SKU-04-009', 'Room Heater by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 67944.00, 32, 3.6, 'Active', '2026-03-12 00:00:00', NULL),
+(40, 4, 'Air Purifier', 'SKU-04-010', 'Air Purifier by Philips. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Philips', 11089.00, 45, 4.3, 'Active', '2026-03-13 00:00:00', NULL),
+(41, 5, 'Samsung 43-inch Smart TV', 'SKU-05-001', 'Samsung 43-inch Smart TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 122199.00, 58, 5.0, 'Active', '2026-03-14 00:00:00', NULL),
+(42, 5, 'LG 43-inch Smart TV', 'SKU-05-002', 'LG 43-inch Smart TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 145149.00, 71, 4.1, 'Active', '2026-03-15 00:00:00', NULL),
+(43, 5, 'Sony 50-inch 4K TV', 'SKU-05-003', 'Sony 50-inch 4K TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 33099.00, 84, 4.8, 'Active', '2026-03-16 00:00:00', NULL),
+(44, 5, 'TCL 55-inch QLED TV', 'SKU-05-004', 'TCL 55-inch QLED TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 56049.00, 97, 3.9, 'Active', '2026-03-17 00:00:00', NULL),
+(45, 5, 'OnePlus 55-inch TV', 'SKU-05-005', 'OnePlus 55-inch TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 78999.00, 14, 4.6, 'Active', '2026-03-18 00:00:00', NULL),
+(46, 5, 'Hisense 50-inch 4K TV', 'SKU-05-006', 'Hisense 50-inch 4K TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 101949.00, 27, 3.7, 'Active', '2026-03-19 00:00:00', NULL),
+(47, 5, 'Samsung 55-inch QLED TV', 'SKU-05-007', 'Samsung 55-inch QLED TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 124899.00, 40, 4.4, 'Active', '2026-03-20 00:00:00', NULL),
+(48, 5, 'LG 55-inch OLED TV', 'SKU-05-008', 'LG 55-inch OLED TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 147849.00, 53, 3.5, 'Active', '2026-03-21 00:00:00', NULL),
+(49, 5, 'Sony 65-inch 4K TV', 'SKU-05-009', 'Sony 65-inch 4K TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 35799.00, 66, 4.2, 'Active', '2026-03-22 00:00:00', NULL),
+(50, 5, 'TCL 65-inch QLED TV', 'SKU-05-010', 'TCL 65-inch QLED TV by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 58749.00, 79, 4.9, 'Active', '2026-03-23 00:00:00', NULL),
+(51, 6, 'Wireless Earbuds', 'SKU-06-001', 'Wireless Earbuds by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 25069.00, 92, 4.0, 'Active', '2026-03-24 00:00:00', NULL),
+(52, 6, 'Bluetooth Speaker', 'SKU-06-002', 'Bluetooth Speaker by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 999.00, 9, 4.7, 'Active', '2026-03-25 00:00:00', NULL),
+(53, 6, 'Noise Cancelling Headphones', 'SKU-06-003', 'Noise Cancelling Headphones by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 5929.00, 22, 3.8, 'Active', '2026-03-26 00:00:00', NULL),
+(54, 6, 'Soundbar 2.1', 'SKU-06-004', 'Soundbar 2.1 by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 10859.00, 35, 4.5, 'Active', '2026-03-27 00:00:00', NULL),
+(55, 6, 'USB Gaming Headset', 'SKU-06-005', 'USB Gaming Headset by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 15789.00, 48, 3.6, 'Active', '2026-03-28 00:00:00', NULL),
+(56, 6, 'Over-Ear Headphones', 'SKU-06-006', 'Over-Ear Headphones by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 20719.00, 61, 4.3, 'Active', '2026-03-29 00:00:00', NULL),
+(57, 6, 'Portable Party Speaker', 'SKU-06-007', 'Portable Party Speaker by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 25649.00, 74, 5.0, 'Active', '2026-03-30 00:00:00', NULL),
+(58, 6, 'Neckband Earphones', 'SKU-06-008', 'Neckband Earphones by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 1579.00, 87, 4.1, 'Active', '2026-03-31 00:00:00', NULL),
+(59, 6, 'Studio Monitor Headphones', 'SKU-06-009', 'Studio Monitor Headphones by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 6509.00, 100, 4.8, 'Active', '2026-04-01 00:00:00', NULL),
+(60, 6, 'Smart Speaker', 'SKU-06-010', 'Smart Speaker by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 11439.00, 17, 3.9, 'Active', '2026-04-02 00:00:00', NULL),
+(61, 7, 'Canon EOS R50', 'SKU-07-001', 'Canon EOS R50 by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 141899.00, 30, 4.6, 'Active', '2026-04-03 00:00:00', NULL),
+(62, 7, 'Nikon Z50', 'SKU-07-002', 'Nikon Z50 by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 29849.00, 43, 3.7, 'Active', '2026-04-04 00:00:00', NULL),
+(63, 7, 'Sony Alpha a6400', 'SKU-07-003', 'Sony Alpha a6400 by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 52799.00, 56, 4.4, 'Active', '2026-04-05 00:00:00', NULL),
+(64, 7, 'Canon EOS 200D', 'SKU-07-004', 'Canon EOS 200D by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 75749.00, 69, 3.5, 'Active', '2026-04-06 00:00:00', NULL),
+(65, 7, 'Nikon D7500', 'SKU-07-005', 'Nikon D7500 by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 98699.00, 82, 4.2, 'Active', '2026-04-07 00:00:00', NULL),
+(66, 7, 'Sony ZV-E10', 'SKU-07-006', 'Sony ZV-E10 by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 121649.00, 95, 4.9, 'Active', '2026-04-08 00:00:00', NULL),
+(67, 7, 'Fujifilm X-S20', 'SKU-07-007', 'Fujifilm X-S20 by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 144599.00, 12, 4.0, 'Active', '2026-04-09 00:00:00', NULL),
+(68, 7, 'GoPro Action Camera', 'SKU-07-008', 'GoPro Action Camera by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 32549.00, 25, 4.7, 'Active', '2026-04-10 00:00:00', NULL),
+(69, 7, 'DJI Pocket Camera', 'SKU-07-009', 'DJI Pocket Camera by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 55499.00, 38, 3.8, 'Active', '2026-04-11 00:00:00', NULL),
+(70, 7, 'Canon PowerShot Camera', 'SKU-07-010', 'Canon PowerShot Camera by Canon. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Canon', 78449.00, 51, 4.5, 'Active', '2026-04-12 00:00:00', NULL),
+(71, 8, 'PlayStation 5 Slim', 'SKU-08-001', 'PlayStation 5 Slim by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 5174.00, 64, 3.6, 'Active', '2026-04-13 00:00:00', NULL),
+(72, 8, 'Xbox Series X', 'SKU-08-002', 'Xbox Series X by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 17669.00, 77, 4.3, 'Active', '2026-04-14 00:00:00', NULL),
+(73, 8, 'Nintendo Switch OLED', 'SKU-08-003', 'Nintendo Switch OLED by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 30164.00, 90, 5.0, 'Active', '2026-04-15 00:00:00', NULL),
+(74, 8, 'Gaming Mouse', 'SKU-08-004', 'Gaming Mouse by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 42659.00, 7, 4.1, 'Active', '2026-04-16 00:00:00', NULL),
+(75, 8, 'Mechanical Gaming Keyboard', 'SKU-08-005', 'Mechanical Gaming Keyboard by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 55154.00, 20, 4.8, 'Active', '2026-04-17 00:00:00', NULL),
+(76, 8, 'Gaming Controller', 'SKU-08-006', 'Gaming Controller by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 67649.00, 33, 3.9, 'Active', '2026-04-18 00:00:00', NULL),
+(77, 8, 'Gaming Headset', 'SKU-08-007', 'Gaming Headset by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 6644.00, 46, 4.6, 'Active', '2026-04-19 00:00:00', NULL),
+(78, 8, '1080p Gaming Monitor', 'SKU-08-008', '1080p Gaming Monitor by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 19139.00, 59, 3.7, 'Active', '2026-04-20 00:00:00', NULL),
+(79, 8, '144Hz Gaming Monitor', 'SKU-08-009', '144Hz Gaming Monitor by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 31634.00, 72, 4.4, 'Active', '2026-04-21 00:00:00', NULL),
+(80, 8, 'Gaming Chair', 'SKU-08-010', 'Gaming Chair by Sony. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Sony', 44129.00, 85, 3.5, 'Active', '2026-04-22 00:00:00', NULL),
+(81, 9, 'Apple Watch SE', 'SKU-09-001', 'Apple Watch SE by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 9679.00, 98, 4.2, 'Active', '2026-04-23 00:00:00', NULL),
+(82, 9, 'Samsung Galaxy Watch', 'SKU-09-002', 'Samsung Galaxy Watch by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 17839.00, 15, 4.9, 'Active', '2026-04-24 00:00:00', NULL),
+(83, 9, 'Fitbit Charge', 'SKU-09-003', 'Fitbit Charge by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 25999.00, 28, 4.0, 'Active', '2026-04-25 00:00:00', NULL),
+(84, 9, 'Garmin Forerunner', 'SKU-09-004', 'Garmin Forerunner by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 34159.00, 41, 4.7, 'Active', '2026-04-26 00:00:00', NULL),
+(85, 9, 'Amazfit GTR', 'SKU-09-005', 'Amazfit GTR by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 42319.00, 54, 3.8, 'Active', '2026-04-27 00:00:00', NULL),
+(86, 9, 'Noise Smartwatch', 'SKU-09-006', 'Noise Smartwatch by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 2479.00, 67, 4.5, 'Active', '2026-04-28 00:00:00', NULL),
+(87, 9, 'boAt Smartwatch', 'SKU-09-007', 'boAt Smartwatch by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 10639.00, 80, 3.6, 'Active', '2026-04-29 00:00:00', NULL),
+(88, 9, 'Huawei Watch Fit', 'SKU-09-008', 'Huawei Watch Fit by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 18799.00, 93, 4.3, 'Active', '2026-04-30 00:00:00', NULL),
+(89, 9, 'OnePlus Watch', 'SKU-09-009', 'OnePlus Watch by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 26959.00, 10, 5.0, 'Active', '2026-05-01 00:00:00', NULL),
+(90, 9, 'Fitbit Versa', 'SKU-09-010', 'Fitbit Versa by Samsung. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Samsung', 35119.00, 23, 4.1, 'Active', '2026-05-02 00:00:00', NULL),
+(91, 10, '65W GaN Charger', 'SKU-10-001', '65W GaN Charger by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 2378.00, 36, 4.8, 'Active', '2026-05-03 00:00:00', NULL),
+(92, 10, '100W USB-C Charger', 'SKU-10-002', '100W USB-C Charger by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 3687.00, 49, 3.9, 'Active', '2026-05-04 00:00:00', NULL),
+(93, 10, 'HDMI Cable 2m', 'SKU-10-003', 'HDMI Cable 2m by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 4996.00, 62, 4.6, 'Active', '2026-05-05 00:00:00', NULL),
+(94, 10, 'USB-C Cable 2m', 'SKU-10-004', 'USB-C Cable 2m by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 6305.00, 75, 3.7, 'Active', '2026-05-06 00:00:00', NULL),
+(95, 10, 'Laptop Backpack', 'SKU-10-005', 'Laptop Backpack by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 7614.00, 88, 4.4, 'Active', '2026-05-07 00:00:00', NULL),
+(96, 10, 'Wireless Charging Pad', 'SKU-10-006', 'Wireless Charging Pad by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 1223.00, 5, 3.5, 'Active', '2026-05-08 00:00:00', NULL),
+(97, 10, 'Phone Car Mount', 'SKU-10-007', 'Phone Car Mount by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 2532.00, 18, 4.2, 'Active', '2026-05-09 00:00:00', NULL),
+(98, 10, 'Bluetooth Adapter', 'SKU-10-008', 'Bluetooth Adapter by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 3841.00, 31, 4.9, 'Active', '2026-05-10 00:00:00', NULL),
+(99, 10, 'Screen Cleaning Kit', 'SKU-10-009', 'Screen Cleaning Kit by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 5150.00, 44, 4.0, 'Active', '2026-05-11 00:00:00', NULL),
+(100, 10, 'External Card Reader', 'SKU-10-010', 'External Card Reader by Anker. Suitable for everyday e-commerce use, with reliable performance and standard warranty support.', 'Anker', 6459.00, 57, 4.7, 'Active', '2026-05-12 00:00:00', NULL);
+
+-- Validation queries
+SELECT COUNT(*) AS customer_count FROM customer;
+SELECT COUNT(*) AS category_count FROM product_category;
+SELECT COUNT(*) AS product_count FROM product_detail;
+SELECT pc.category_name, COUNT(pd.product_id) AS product_count
+FROM product_category pc LEFT JOIN product_detail pd ON pc.category_id = pd.category_id
+GROUP BY pc.category_id, pc.category_name ORDER BY pc.category_id;
+
+-- Example chatbot queries
+SELECT * FROM product_detail WHERE price <= 60000 AND status = 'Active' ORDER BY rating DESC;
+SELECT pd.product_id, pd.product_name, pd.price, pd.stock_quantity, pc.category_name
+FROM product_detail pd JOIN product_category pc ON pd.category_id = pc.category_id
+WHERE pc.category_name = 'Laptops' AND pd.status = 'Active';
