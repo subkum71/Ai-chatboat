@@ -5,8 +5,16 @@ import langchain
 from langchain.agents import create_agent
 from langchain_ollama import ChatOllama
 
-from app.Agent.toolproduct import search_product_categories
-from app.Agent.toolproduct import get_all_product_categories
+from app.Agent.toolproduct import(
+    search_product_categories,
+    get_all_product_categories,
+    search_product_on_name_Service,
+    search_product_on_description_Service,
+    search_product_on_brand_Service,
+    get_product_List_Category_Service,
+    is_stockavilableforproduct_Service
+)
+ 
 
 from app.Agent.prompts import SYSTEM_PROMPT
 
@@ -24,7 +32,12 @@ model = ChatOllama(
 ## Tool configuration
 tools = [
     get_all_product_categories,
-    search_product_categories
+    search_product_categories,
+    search_product_on_name_Service,
+    search_product_on_description_Service,
+    search_product_on_brand_Service,
+    get_product_List_Category_Service,
+    is_stockavilableforproduct_Service
 ]
 ## Create an Agent
 agent = create_agent(
