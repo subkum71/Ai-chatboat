@@ -152,7 +152,7 @@ def get_product_List_For_Given_Category(Productcategory):
             cursor = connection.cursor(dictionary=True)
             query = """
                 select product_name as ProductName,  brand, price, stock_quantity as Qty 
-                from ecommerce_chat.product_detail as prod, ecommerce_chat.productproduct_category as Catg
+                from ecommerce_chat.product_detail as prod, ecommerce_chat.product_category as Catg
                 where prod.category_id = Catg.Category_id  and UPPER(Catg.category_name) LIKE UPPER(%s)
                 """ 
             cursor.execute(query,(Productcategory+'%',))

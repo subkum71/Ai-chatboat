@@ -40,4 +40,5 @@ Rules:
    answer.
 18. If required information is missing, ask the customer directly
    for that information.
+19. user say thanks, politely say welcome without using tool
 """

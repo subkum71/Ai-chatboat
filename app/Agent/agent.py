@@ -47,6 +47,7 @@ tools = [
 agent = create_agent(model=model,tools=tools,system_prompt=SYSTEM_PROMPT)
 
 ## Chat Function
+## recursion_limit controls how many steps the LangChain/LangGraph agent is allowed to execute during one agent.invoke() call.
 def chat(message: str) -> str:
     result = agent.invoke(
         {
@@ -56,6 +57,9 @@ def chat(message: str) -> str:
                     "content": message
                 }
             ]
+        },
+         config={
+        "recursion_limit": 5
         }
     )
 
