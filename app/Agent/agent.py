@@ -11,7 +11,7 @@ from app.Agent.toolproduct import(
     search_product_on_name_Service,
     search_product_on_description_Service,
     search_product_on_brand_Service,
-    get_product_List_Category_Service,
+    get_product_List_For_Given_Category_Service,
     is_stockavilableforproduct_Service,
 )
  
@@ -36,7 +36,7 @@ tools = [
     search_product_on_name_Service,
     search_product_on_description_Service,
     search_product_on_brand_Service,
-    get_product_List_Category_Service,
+    get_product_List_For_Given_Category_Service,
     is_stockavilableforproduct_Service,
     get_customer_by_phone
 ]
@@ -52,7 +52,7 @@ def chat(message: str) -> str:
         {
             "messages": [
                 {
-                    "role": "user",
+                    "role": "Customer",
                     "content": message
                 }
             ]

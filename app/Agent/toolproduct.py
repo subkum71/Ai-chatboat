@@ -7,7 +7,7 @@ from app.Backend.product.productservice import (
     search_product_on_name,
     search_product_on_description,
     search_product_on_brand,
-    get_product_List_Category,
+    get_product_List_For_Given_Category,
     is_stockavilableforproduct
 )
 
@@ -100,17 +100,17 @@ def search_product_on_brand_Service(productname:str, brand:str) -> dict:
         return {
             "success": True,
             "data": [],
-            "message": error
+            "message": "No product found under given category{productname} under brand {brand}"
         }
 
     return {
         "success": True,
         "data": productcatlist,
-        "message": "Products found."
+        "message": "Product found."
     }
 
 @tool
-def get_product_List_Category_Service(productcatg:str) -> dict:
+def get_product_List_For_Given_Category_Service(productcatg:str) -> dict:
     """
     For customer , Get the list of products for given Product Category.
 
@@ -119,7 +119,7 @@ def get_product_List_Category_Service(productcatg:str) -> dict:
     Returns:
         A list of product Name with their details.
     """
-    productcatlist, error = get_product_List_Category(productcatg)
+    productcatlist, error = get_product_List_For_Given_Category(productcatg)
 
     if error:
             return {

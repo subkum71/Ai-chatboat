@@ -97,10 +97,10 @@ def search_product_on_description(productdescription):
             return None,"Error in search_product_on_description,Database connection failed "
         cursor = connection.cursor(dictionary=True)
         query = """
-            select product_name as ProductName, description as productdescription, brand, price, stock_quantity as Qty from ecommerce_chat.product_detail
+            select product_name as productname, description as productdescription, brand, price, stock_quantity as Qty from ecommerce_chat.product_detail
             where UPPER(description) LIKE UPPER(%s)
         """ 
-        cursor.execute(query,(productdescription+'%',))
+        cursor.execute(query,('%'+productdescription+'%',))
         productcatlist = cursor.fetchall()
         return productcatlist,""
     
@@ -141,7 +141,7 @@ def search_product_on_brand(productname,productbrand):
         if connection and connection.is_connected():
             connection.close()
      #6 Get Product List for Given Category
-def get_product_List_Category(Productcategory):
+def get_product_List_For_Given_Category(Productcategory):
              # database code to get matching Product category list
         connection = None
         cursor = None
@@ -178,10 +178,10 @@ def is_stockavilableforproduct(productname):
             return None,"Error in is_stockavilableforproduct,Database connection failed "
         cursor = connection.cursor(dictionary=True)
         query = """
-                select product_name as ProductName, description as productdescription, brand, price, stock_quantity as Qty from ecommerce_chat.product_detail
+                select product_name as productName, description as productdescription, brand, price, stock_quantity as Qty from ecommerce_chat.product_detail
                 where stock_quantity>0 and UPPER(product_name) LIKE UPPER(%s) 
                 """ 
-        cursor.execute(query,(productname+'%',productname+'%',))
+        cursor.execute(query,('%'+productname+'%',))
         productcatlist = cursor.fetchall()
         return productcatlist,""
             

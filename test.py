@@ -7,12 +7,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 ## importing project's package
-from app.Backend.customer.service import get_allcustomer
+from app.Backend.customer.service import get_customer
 import app.Backend.product.productservice
 ## main function
 
 def customerList():
-    customers = get_allcustomer()
+    customers = get_customer()
 
     print("Customer List")
     print("-" * 80)
@@ -65,6 +65,8 @@ def search_product_on_name():
     else:
         print(errormsg)
 
+
+
 def search_product_on_barnd():
     errormsg=""
     print("search_product_on_barnd")
@@ -80,12 +82,70 @@ def search_product_on_barnd():
     else:
         print(errormsg)
 
+def search_product_on_Description():
+    errormsg=""
+    print("search_product_on_name")
+    productcatlist, errormsg = app.Backend.product.productservice.search_product_on_description("TV")
+    if errormsg =="" :
+        if len(productcatlist)==0 :
+             print("No matching Product found")
+        for catg in productcatlist:
+                print(
+                    f"Name: {catg['productname']}, "
+                    f"Description: {catg['productdescription']} "                
+                )
+    else:
+        print(errormsg)
+def search_product_on_brand():
+    errormsg=""
+    print("search_product_on_name")
+    productcatlist, errormsg = app.Backend.product.productservice.search_product_on_brand("TV","Samsung")
+    if errormsg =="" :
+        if len(productcatlist)==0 :
+             print("No matching Product found")
+        for catg in productcatlist:
+                print(
+                    f"Name: {catg['productname']}, "
+                    f"Description: {catg['productdescription']} "                
+                )
+    else:
+        print(errormsg)
+
+def search_productList_on_Catg():
+    errormsg=""
+    print("search_product_on_name")
+    productcatlist, errormsg = app.Backend.product.productservice.get_product_List_For_Given_Category("Electronics")
+    if errormsg =="" :
+        if len(productcatlist)==0 :
+             print("No matching Product found")
+        for catg in productcatlist:
+                print(
+                    f"Name: {catg['productName']}, "
+                    f"Description: {catg['productdescription']} "                
+                )
+    else:
+        print(errormsg)
+def is_stockavilableforproduct():
+    errormsg=""
+    print("search_product_on_name")
+    productcatlist, errormsg = app.Backend.product.productservice.is_stockavilableforproduct("TV")
+    if errormsg =="" :
+        if len(productcatlist)==0 :
+             print("No matching Product found")
+        for catg in productcatlist:
+                print(
+                    f"Name: {catg['productName']}, "
+                    f"Description: {catg['productdescription']} "                
+                )
+    else:
+        print(errormsg)
+
 def main():
 ##  customerList()
 ##   productcatg_list()
 ##   product_listForcatg()
     print("Test1")
-    search_product_on_barnd()
-
+##   search_product_on_barnd()
+    search_product_on_Description()
 ## Main start from here
 main()
